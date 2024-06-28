@@ -3,7 +3,7 @@ import Web3Modal from 'web3modal';
 import {ethers} from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import axios from "axios";
-import {userouter} from "next/router";
+import {useRouter, userouter} from "next/router";
 
 import { VotingAddress,VotingAddressABI } from './constants';
 
@@ -14,8 +14,58 @@ const fetchContract = (signerOrProvider) => new ethers.Contract(VotingAddress,Vo
 export const VotingContext = React.createContext();
 
 export const VotingProvider = ({children}) => {
-    const votingTitle = "My first smart contract app"; 
-    return <VotingContext.Provider value={{votingTitle}}>{children}</VotingContext.Provider>;
+    const votingTitle = "My first smart contract app";
+    const router = useRouter();
+    const [currrentAccount,setCurrentAccount] = useState("");
+    const [candidateLength,setCandidateLength] = useState(0);
+    const pushCandidate = [];
+    const candidateIndex = [];
+    const [candidateArray,setCandidateArray] = useState(pushCandidate);
+    //END OF CANDIDATE
+
+    const [error,setError] = useState("");
+    const highestVote = [];
+
+    //VOTER SECTION
+    const pushVoter = [];
+    const[voterArray,setVoterArray] = useState(pushVoter);
+    const [voterLength,setVoterLength] = useState('');
+    const[voterAdress,setVoterAdress] = useState([]);
+
+    //CONNECTING METAMASK
+    const checkIfWalletIsConnected = async () => {
+      if(!window.ethereum) return setError("Make sure you have metamask!");
+
+      const account = await window.ethereum.request({method: 'eth_accounts'});  
+      if(account.length){
+        setCurrentAccount(account[0]);
+      }
+      else{
+        setError("Please Install Metamask, Reload")
+      }
+    };
+    //CONNECT WALLET
+    const connectWallet = async() => {
+      if(!window.ethereum) return setError("Make sure you have metamask!");
+      const account = await window.ethereum.request({method: 'eth_requestAccounts'});  
+      setCurrentAccount(account[0]);
+
+    };
+
+    //Upload to ipfs voter image
+    const uploadToIPFS = async (file) => {
+      try{
+        const added = await client.add({content: file});
+
+        const url = 'https://ipfs.infura.io/ipfs/${added.path}';
+        return url;
+      }
+      catch(error){
+        setError("Error Uploading file to IPFS");
+      }
+    };
+
+    return <VotingContext.Provider value={{votingTitle,checkIfWalletIsConnected,connectWallet,uploadToIPFS}}>{children}</VotingContext.Provider>;
 };
 
 const Voter = () => {
