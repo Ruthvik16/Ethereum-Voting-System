@@ -60,7 +60,7 @@ const allowedVoters = () => {
                 </p>
                 <p className= {Style.sideInfo_para}>Contract Candidate</p>
               </div>
-              <div className={Style.car}>
+              <div className={Style.card}>
                 {/* {voterArray.map((el,i)=>(
                 <div key = {i+1} className={Style.card_box}>
                   <div className={Style.image}> 
@@ -102,13 +102,45 @@ const allowedVoters = () => {
         <div className={Style.input__container}> 
           <Input 
             inputType = "text" 
-            title = "Address"
+            title = "Name"
             placeholder = "Voter Name" 
             handeleClick = {(e) =>
             setFormInput({ ...formInput,name: e.target.value })
             }
           />
+          <Input 
+            inputType = "text" 
+            title = "Address"
+            placeholder = "Voter Address" 
+            handeleClick = {(e) =>
+            setFormInput({ ...formInput,address: e.target.value })
+            }
+          />
+          <Input 
+            inputType = "text" 
+            title = "Position"
+            placeholder = "Voter Position" 
+            handeleClick = {(e) =>
+            setFormInput({ ...formInput,position: e.target.value })
+            }
+          />
+          <div className={Style.Button}>
+            <Button btnName = "Authorized Voter" handeleClick = {() => {}}/>
+          </div>
         </div>        
+      </div>
+      {/* /////////////////////////////// */}
+      <div className={Style.createdVoter}>
+        <div className={Style.createdVoter__info}>
+          <Image src = {images.creator} alt = "User Profile"/>
+          <p>Notice for the User</p>
+          <p>
+            Organizer<span>0x12345</span>
+          </p>
+          <p>
+            Only Organizerof the voting contract can create a voter.
+          </p>
+        </div>
       </div>
     </div>
   )
