@@ -1,4 +1,3 @@
-Have to continue code from JSX Part in allowed-voters.js , timestamp = 1:50
 
 # Sample Hardhat Project
 
